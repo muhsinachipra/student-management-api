@@ -27,6 +27,8 @@ PORT=3000
 MONGO_URI=mongodb+srv://<user>:<password>@<cluster>/<db>?retryWrites=true&w=majority
 JWT_SECRET=replace_me_with_a_long_random_secret
 JWT_EXPIRES_IN=1d
+DEFAULT_ADMIN_EMAIL=admin@admin.com           # optional, see "Initial Admin User"
+DEFAULT_ADMIN_PASSWORD=admin123              # optional, see "Initial Admin User"
 ```
 
 ### Installation & Local Run
@@ -44,23 +46,32 @@ npm start
 
 By default the server listens on **`http://localhost:${PORT}`** (3000 if not overridden).
 
-### Initial Admin User
+### Health Check
 
-There is no seeding logic here; create an admin directly in MongoDB (e.g. via MongoDB Atlas UI):
+- **URL**: `GET /health`
+- **Response**:
 
 ```json
-{
-  "name": "Admin",
-  "email": "admin@test.com",
-  "password": "<bcrypt-hashed-password>",
-  "role": "admin"
-}
+{ "status": "ok" }
 ```
 
-Or temporarily insert via a script, but the model expects:
+### Initial Admin User
 
-- `role`: `"admin"` or `"student"`
-- `password`: **hashed** (bcrypt)
+On startup the app **automatically seeds a default admin user** if no admin exists yet.
+
+- The seeded credentials come from the environment:
+  - `DEFAULT_ADMIN_EMAIL` (falls back to `admin@admin.com` if not set)
+  - `DEFAULT_ADMIN_PASSWORD` (falls back to `admin123` if not set)
+- The seed runs once: if an admin already exists, it does nothing.
+
+Example `.env` snippet:
+
+```bash
+DEFAULT_ADMIN_EMAIL=super.admin@mydomain.com
+DEFAULT_ADMIN_PASSWORD=some-strong-password
+```
+
+**Security note**: In production, always use strong unique values, rotate them after first login, and never keep the default credentials.
 
 ### Authentication Flow (Header-Based JWT)
 
@@ -275,7 +286,7 @@ Content-Type: application/json
 
 After starting the server, interactive API docs are available at:
 
-- `GET /docs`
+- `GET /api-docs`
 
 This is backed by an OpenAPI 3 spec defined in `src/config/swagger.ts`.
 

@@ -7,30 +7,49 @@ import { errorHandler } from "./middleware/errorHandler";
 import { adminRoutes } from "./routes/adminRoutes";
 import { authRoutes } from "./routes/authRoutes";
 import { studentRoutes } from "./routes/studentRoutes";
+import { seedAdmin } from "./config/seed";
 
 async function bootstrap() {
-    await connectDb();
+    try {
+        await connectDb();
+        
+        try {
+            await seedAdmin();
+        } catch (error) {
+            // Log seeding error but continue startup - non-critical
+            // eslint-disable-next-line no-console
+            console.error("Warning: Admin seeding failed, but continuing server startup:", error instanceof Error ? error.message : String(error));
+        }
 
-    const app = express();
+        const app = express();
 
-    app.use(express.json());
+        app.use(express.json());
 
-    app.get("/health", (_req, res) => {
-        res.json({ status: "ok" });
-    });
+        app.get("/health", (_req, res) => {
+            res.json({ status: "ok" });
+        });
 
-    app.use("/api/auth", authRoutes);
-    app.use("/api/admin", adminRoutes);
-    app.use("/api/student", studentRoutes);
+        app.use("/api/auth", authRoutes);
+        app.use("/api/admin", adminRoutes);
+        app.use("/api/student", studentRoutes);
 
-    app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiSpec));
+        app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiSpec));
 
-    app.use(errorHandler);
+        app.use(errorHandler);
 
-    app.listen(env.PORT, () => {
+        app.listen(env.PORT, () => {
+            // eslint-disable-next-line no-console
+            console.log(`Server running on port ${env.PORT}`);
+        });
+    } catch (error) {
         // eslint-disable-next-line no-console
-        console.log(`Server running on port ${env.PORT}`);
-    });
+        console.error("Failed to start server:", error instanceof Error ? error.message : String(error));
+        process.exit(1);
+    }
 }
 
-void bootstrap();
+bootstrap().catch((error) => {
+    // eslint-disable-next-line no-console
+    console.error("Unhandled error in bootstrap:", error instanceof Error ? error.message : String(error));
+    process.exit(1);
+});
