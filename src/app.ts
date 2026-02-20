@@ -1,7 +1,6 @@
 import express from "express";
 import swaggerUi from "swagger-ui-express";
 import { connectDb } from "./config/db";
-import { env } from "./config/env";
 import { openApiSpec } from "./config/swagger";
 import { errorHandler } from "./middleware/errorHandler";
 import { requestLogger } from "./middleware/requestLogger";

@@ -48,7 +48,8 @@ By default the server listens on **`http://localhost:${PORT}`** (3000 if not ove
 
 ### Health Check
 
-- **URL**: `GET /health`
+- **Production URL**: [https://student-management-api-86e9.onrender.com/health](https://student-management-api-86e9.onrender.com/health)
+- **Local URL**: `GET http://localhost:3000/health`
 - **Response**:
 
 ```json
@@ -86,6 +87,7 @@ Authorization: Bearer <jwt_token_here>
 #### Login
 
 - **URL**: `POST /api/auth/login`
+- **Production**: `POST https://student-management-api-86e9.onrender.com/api/auth/login`
 - **Body**:
 
 ```json
@@ -122,6 +124,7 @@ All admin routes are protected by:
 #### Add Student
 
 - **URL**: `POST /api/admin/add-student`
+- **Production**: `POST https://student-management-api-86e9.onrender.com/api/admin/add-student`
 - **Headers**:
 
 ```http
@@ -160,6 +163,7 @@ Content-Type: application/json
 #### Assign Task
 
 - **URL**: `POST /api/admin/assign-task`
+- **Production**: `POST https://student-management-api-86e9.onrender.com/api/admin/assign-task`
 - **Headers**:
 
 ```http
@@ -284,20 +288,31 @@ Content-Type: application/json
 
 ### API Documentation (Swagger)
 
-After starting the server, interactive API docs are available at:
+Interactive API docs are available at:
 
-- `GET /api-docs`
+- **Production**: [https://student-management-api-86e9.onrender.com/api-docs](https://student-management-api-86e9.onrender.com/api-docs)
+- **Local**: `http://localhost:3000/api-docs` (when running locally)
 
 This is backed by an OpenAPI 3 spec defined in `src/config/swagger.ts`.
 
 ### Deployment
 
-You can deploy this Node/Express app to services like Render, Railway, or similar platforms:
+This API is deployed and available at:
+
+**Production URL**: [https://student-management-api-86e9.onrender.com](https://student-management-api-86e9.onrender.com)
+
+**API Base URL**: `https://student-management-api-86e9.onrender.com/api`
+
+**Health Check**: [https://student-management-api-86e9.onrender.com/health](https://student-management-api-86e9.onrender.com/health)
+
+**Swagger Documentation**: [https://student-management-api-86e9.onrender.com/api-docs](https://student-management-api-86e9.onrender.com/api-docs)
+
+#### Deployment Details
+
+Deployed on Render. To deploy to similar platforms (Render, Railway, etc.):
 
 - Ensure environment variables are configured on the platform (same as `.env`).
 - Use:
   - **Build command**: `npm run build`
   - **Start command**: `npm start`
-
-Add the live URL to this section once deployed.
 

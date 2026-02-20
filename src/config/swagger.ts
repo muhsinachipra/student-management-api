@@ -10,7 +10,12 @@ const swaggerOptions: Options = {
     },
     servers: [
       {
+        url: "https://student-management-api-86e9.onrender.com",
+        description: "Production server",
+      },
+      {
         url: "http://localhost:3000",
+        description: "Local development server",
       },
     ],
     components: {
