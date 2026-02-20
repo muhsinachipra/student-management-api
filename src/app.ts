@@ -39,9 +39,10 @@ async function bootstrap() {
 
         app.use(errorHandler);
 
-        app.listen(env.PORT, () => {
+        const PORT = process.env.PORT || 3000;
+        app.listen(PORT, () => {
             // eslint-disable-next-line no-console
-            console.log(`Server running on port ${env.PORT}`);
+            console.log(`Server running on port ${PORT}`);
         });
     } catch (error) {
         // eslint-disable-next-line no-console
