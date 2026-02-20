@@ -20,12 +20,21 @@ adminRoutes.use(authenticate, isAdmin);
  *       content:
  *         application/json:
  *           schema:
- *             allOf:
- *               - $ref: '#/components/schemas/Student'
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               department:
+ *                 type: string
+ *               password:
+ *                 type: string
  *             required:
  *               - name
  *               - email
  *               - department
+ *               - password
  *     responses:
  *       201:
  *         description: Student created successfully
