@@ -4,6 +4,7 @@ import { connectDb } from "./config/db";
 import { env } from "./config/env";
 import { openApiSpec } from "./config/swagger";
 import { errorHandler } from "./middleware/errorHandler";
+import { requestLogger } from "./middleware/requestLogger";
 import { adminRoutes } from "./routes/adminRoutes";
 import { authRoutes } from "./routes/authRoutes";
 import { studentRoutes } from "./routes/studentRoutes";
@@ -23,6 +24,7 @@ async function bootstrap() {
 
         const app = express();
 
+        app.use(requestLogger);
         app.use(express.json());
 
         app.get("/health", (_req, res) => {
